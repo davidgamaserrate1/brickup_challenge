@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
  
 import './home-styles.css'
 import { TaskCard } from "../components/taskCard";
@@ -11,9 +11,33 @@ import { SearchOutlined } from "@ant-design/icons";
 const { Content } = Layout;
 
 export function Home(){  
+    const [ tasks, setTasks] = useState([])
 
-const { token: { colorBgContainer }} = theme.useToken();
+    const TASK_URI = process.env.REACT_APP_TASK_URI;
+    
+    const  getTasks = async() =>{
+        await 
+            fetch(TASK_URI)
+            .then((response)=>response.json())
+            .then((response)=>setTasks(response))
+    }
+    
+    useEffect(()=>{
+        getTasks()
+    },[])
+    
+    const { token: { colorBgContainer }} = theme.useToken();
 
+
+    const renderTasks = (status) => {
+        return tasks
+          .filter(task => task.status === status)
+          .map(task => (
+            <TaskCard key={task.id}/>
+          ));
+      };
+
+      
 return (
     <Layout  className="home_layout"> 
         <Content className="home_content">
@@ -26,16 +50,12 @@ return (
                 <div className="task_group">
                     <div className="task_group__pending"> 
                         <TaskTittle description="pendentes" type="pending" /> 
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
+                        {renderTasks('pendente')} 
                     </div>
                     
                     <div  className="task_group__completed"> 
                         <TaskTittle description="Finalizadas" type="completed" />                         
-                        <TaskCard />
-                        <TaskCard />
-                        <TaskCard />
+                        {renderTasks('concluido')}  
                     </div>
                 </div>
             </div>

@@ -41,9 +41,10 @@
 
 .task_group__pending, .task_group__completed{
     display: flex;
+    width: 50%;
     flex-wrap: wrap;
     gap: 16px;
     flex-direction: column;
-    
-    
+    min-height: 390px;
 }
+ 
