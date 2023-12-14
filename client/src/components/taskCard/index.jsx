@@ -4,13 +4,7 @@ import {EditOutlined} from '@ant-design/icons';
 
 import stageImg from './task_2_task.png'
 
-export function TaskCard(){
-    const props ={
-        name : "Tarefa a",
-        description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit,Lorem ipsum dolor sit",
-        status: "pendente",
-        photo: "pendente"
-    }
+export function TaskCard(props){    
 
     return(
         <Card title={props.name}    className='task_card'>            

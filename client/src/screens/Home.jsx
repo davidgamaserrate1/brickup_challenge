@@ -5,62 +5,120 @@ import { TaskCard } from "../components/taskCard";
 import { ContainerTittle } from "../components/containerTittle";
 import { TaskTittle } from "../components/taskTittle";
 
-import { Input, Layout, theme } from "antd";
+import { Input, Layout, Pagination, theme } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 const { Content } = Layout;
 
-export function Home(){  
-    const [ tasks, setTasks] = useState([])
 
-    const TASK_URI = process.env.REACT_APP_TASK_URI;
-    
-    const  getTasks = async() =>{
-        await 
-            fetch(TASK_URI)
-            .then((response)=>response.json())
-            .then((response)=>setTasks(response))
-    }
-    
-    useEffect(()=>{
-        getTasks()
-    },[])
-    
+
+export function Home() {  
     const { token: { colorBgContainer }} = theme.useToken();
 
+    const startCurrentPage = 1
 
-    const renderTasks = (status) => {
-        return tasks
-          .filter(task => task.status === status)
-          .map(task => (
-            <TaskCard key={task.id}/>
-          ));
-      };
+    const [tasks, setTasks] = useState([]);
+    const TASK_URI = process.env.REACT_APP_TASK_URI;
+    const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
+    const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);
 
-      
-return (
-    <Layout  className="home_layout"> 
-        <Content className="home_content">
-            <div  className="content_dashboard" style={{background:colorBgContainer}} >
-                <ContainerTittle tittle="Minhas tarefas"/>
-                <div className="search_task" >
-                    <Input  size="large" placeholder="Pesquisar por nome" prefix={<SearchOutlined />} />
-                </div>
+    const getTasks = async () => {
+        try {
+            const response = await fetch(TASK_URI);
+            const data = await response.json();
+            setTasks(data);
+        } catch (error) {
+            console.error('Erro ao buscar tarefas:', error);
+        }
+    };
+    
+    useEffect(() => {
+        getTasks();
+    }, []);
 
-                <div className="task_group">
-                    <div className="task_group__pending"> 
-                        <TaskTittle description="pendentes" type="pending" /> 
-                        {renderTasks('pendente')} 
+
+    const tasksPerPage = 4;
+
+    const renderPendingTasks = () => {
+        const indexOfLastTask = currentPendingPage * tasksPerPage;
+        const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+        const pendingTasks = tasks.filter(task => task.status.toLowerCase() === 'pendente');
+        const currentPendingTasks = pendingTasks.slice(indexOfFirstTask, indexOfLastTask);
+
+        return currentPendingTasks.map(task => (
+            <TaskCard
+                key={task.id}
+                name={task.name}
+                description={task.description}
+                status={task.status}
+                photo={task.photo}
+            />
+        ));
+    };
+
+    const renderCompletedTasks = () => {
+        const indexOfLastTask = currentCompletedPage * tasksPerPage;
+        const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+        const completedTasks = tasks.filter(task => task.status.toLowerCase() === 'concluido');
+        const currentCompletedTasks = completedTasks.slice(indexOfFirstTask, indexOfLastTask);
+
+        return currentCompletedTasks.map(task => (
+            <TaskCard
+                key={task.id}
+                name={task.name}
+                description={task.description}
+                status={task.status}
+                photo={task.photo}
+            />
+        ));
+    };
+
+    const handlePendingPageChange = (page) => {
+        setCurrentPendingPage(page);
+    };
+
+    const handleCompletedPageChange = (page) => {
+        setCurrentCompletedPage(page);
+    };
+
+    return (
+        <Layout className="home_layout"> 
+            <Content className="home_content">
+                <div className="content_dashboard" style={{background:colorBgContainer}} >
+                    <ContainerTittle tittle="Minhas tarefas"/>
+                    <div className="search_task" >
+                        <Input  size="large" placeholder="Pesquisar por nome" prefix={<SearchOutlined />} />
                     </div>
-                    
-                    <div  className="task_group__completed"> 
-                        <TaskTittle description="Finalizadas" type="completed" />                         
-                        {renderTasks('concluido')}  
+
+                    <div className="task_group">
+                        <div className="task_group__pending"> 
+                            <TaskTittle description="Pendentes" type="pending" /> 
+                            {renderPendingTasks()} 
+                            <Pagination
+                                className="task_group__pending__pagination"
+                                current={currentPendingPage}
+                                defaultCurrent={1}
+                                total={tasks.filter(task => task.status === 'pendente').length}
+                                pageSize={tasksPerPage}
+                                onChange={handlePendingPageChange}
+                            />
+                        </div>
+                        
+                        <div className="task_group__completed"> 
+                            <TaskTittle description="Finalizadas" type="completed" />                         
+                            {renderCompletedTasks()}  
+                            <Pagination
+                                className="task_group__pending__pagination"
+                                current={currentCompletedPage}
+                                defaultCurrent={1}
+                                total={tasks.filter(task => task.status === 'concluido').length}
+                                pageSize={tasksPerPage}
+                                onChange={handleCompletedPageChange}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Content>
-    </Layout>
-)}
-
- 
+            </Content>
+        </Layout>
+    );
+}

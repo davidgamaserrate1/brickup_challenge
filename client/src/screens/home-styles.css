@@ -36,15 +36,32 @@
 }
 
 .task_group__completed{
-    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .task_group__pending, .task_group__completed{
     display: flex;
     width: 50%;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 16px;
     flex-direction: column;
-    min-height: 390px;
+    
 }
  
+
+.task_group__pending, .task_group__completed{
+    min-height: 900px;
+    max-height: 900px;
+    height: 900px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.task_group__pending__pagination{
+    
+position: absolute;
+bottom: 0;
+margin: auto auto;
+
+}
