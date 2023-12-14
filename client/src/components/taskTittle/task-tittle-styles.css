@@ -1,0 +1,9 @@
+.task_tittle{
+    text-transform: uppercase;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    align-items: center;
+    width: 422px;
+    display: flex;
+    justify-content: space-between;
+}

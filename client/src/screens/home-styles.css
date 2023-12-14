@@ -1,0 +1,44 @@
+.home_layout{
+    
+}
+
+.home_content{
+    padding: 0 80px;
+    height: 100vh;
+
+}
+
+.content_dashboard{
+    margin-top: 40px;
+    padding-top: 20px;
+    border-radius: 50px;
+    height: calc(100% - 40px);
+
+
+     
+}
+
+.search_task{
+    width: 200px;
+    text-align: center;
+    margin: 64px auto;
+    border-radius: 15px;
+    border: 1px solid rgb(1,1,1,0.1);
+}
+
+.task_group{
+    width: 1014px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.task_group__pending, .task_group__completed{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    flex-direction: column;
+    
+}
