@@ -35,10 +35,15 @@
     flex-wrap: wrap;
 }
 
+.task_group__completed{
+    margin-top: 10px;
+}
+
 .task_group__pending, .task_group__completed{
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
     flex-direction: column;
+    
     
 }

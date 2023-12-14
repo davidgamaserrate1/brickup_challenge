@@ -25,14 +25,14 @@ return (
 
                 <div className="task_group">
                     <div className="task_group__pending"> 
-                        <TaskTittle description="pendentes" /> 
+                        <TaskTittle description="pendentes" type="pending" /> 
                         <TaskCard />
                         <TaskCard />
                         <TaskCard />
                     </div>
                     
                     <div  className="task_group__completed"> 
-                        <TaskTittle description="concluídos" /> 
+                        <TaskTittle description="Finalizadas" type="completed" />                         
                         <TaskCard />
                         <TaskCard />
                         <TaskCard />
