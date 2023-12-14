@@ -1,5 +1,5 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Typography, Upload } from "antd";
+import { Button, Form, Input, Modal, Select, Typography, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ export function TaskModal({
     isModalOpen, 
     handleOk, 
     handleCancel,
+    taskId,
     taskName,
     taskPhoto,
     taskDescription,
@@ -18,7 +19,7 @@ export function TaskModal({
     const [newTaskStatus, setNewTaskStatus] = useState(taskStatus || 'pendente')
     const [newTaskPhoto, setNewTaskPhoto] = useState(taskPhoto)
  
-    const tittleModal = typeModal ==='edit' ? "Editar atividade" : "Cadastrar atividade"
+    const tittleModal = typeModal ==='edit' ? "Editar tarefa" : "Cadastrar tarefa"
     
     const normFile = (e) => {
         if (Array.isArray(e))  
@@ -28,12 +29,17 @@ export function TaskModal({
     };
 
     async function saveTask(){
-        const task = {
+        let task 
+        
+        task = {
             name : newTaskName,
             description :newTaskDescription,
             status: newTaskStatus,
             photo :newTaskPhoto 
-        }
+        }  
+
+        if(typeModal === 'edit') 
+            task = {...task, id:taskId }
         
         const SEND_URL = process.env.REACT_APP_TASK_URI;
         const method = typeModal === 'edit' ? 'PUT' : 'POST'
@@ -44,8 +50,8 @@ export function TaskModal({
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(task)
-        })
-        .finally(()=>window.location.reload())
+        })       
+        .finally( handleOk )
     
     }
 
@@ -63,8 +69,15 @@ export function TaskModal({
             <TextArea placeholder="Descreva a tarefa" value={newTaskDescription} onChange={(e)=>setNewTaskDescription(e.target.value)} />
            
             <Typography.Title style={{marginTop:16}} level={5}>Status</Typography.Title>
-            <Input value={newTaskStatus} disabled={typeModal ==='edit' ? false : true}  
-                onChange={(e)=>{if(typeModal ==='edit') setNewTaskStatus(e.target.value)}} 
+            <Select
+                labelInValue
+                defaultValue={{ value:newTaskStatus, label: newTaskStatus}}
+                disabled={typeModal ==='edit' ? false : true}  
+                onChange={(e)=>{if(typeModal ==='edit') setNewTaskStatus(e.label)}} 
+                options={[
+                    {value: 'pendente',  label: 'pendente',},
+                    {value: 'concluido', label: 'concluido',},
+                ]}
             />
            
             <Form.Item

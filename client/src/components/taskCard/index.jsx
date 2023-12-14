@@ -3,13 +3,29 @@ import './task-card-styles.css'
 import {EditOutlined} from '@ant-design/icons';
 
 import stageImg from './task_2_task.png'
+import { TaskModal } from '../taskModal';
+import { useState } from 'react';
 
 export function TaskCard(props){    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+      setIsModalOpen(true);
+    };
+    
+    const handleOk = () => {
+      setIsModalOpen(false);
+    };
+  
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
 
     return(
+        <>
         <Card title={props.name}    className='task_card'>            
-            <EditOutlined  className='task_card__edit'/> 
-            <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}  } `} > {props.status} </div>
+            <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/> 
+            <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} > {props.status} </div>
             <div className="task_card_info">
                 <div className="task_card_img__div">
                     <img className="task_card_img" src={stageImg} alt='imag' />
@@ -17,5 +33,17 @@ export function TaskCard(props){
                 <div  className='task_card__description'> {props.description} </div>
             </div>
         </Card>
+        <TaskModal
+            typeModal='edit'
+            isModalOpen={isModalOpen}
+            handleOk={handleOk}
+            handleCancel={handleCancel}
+            taskId={props.id}
+            taskName={props.name}
+            taskPhoto={props.photo}
+            taskDescription={props.description}
+            taskStatus={props.status}
+        />
+        </>
     )
 }

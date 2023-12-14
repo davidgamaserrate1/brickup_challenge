@@ -17,7 +17,7 @@
     &:hover{
         cursor: pointer;
         transition: 0.2s linear;
-        color: #3ba556;    
+        color: #1677FF;    
         transform: scale(1.11);
     }
 }
@@ -49,7 +49,6 @@
 .task_card_img__div{
     width: 50px;
     height: 50px;
-    
 }
 
 .task_card_img{

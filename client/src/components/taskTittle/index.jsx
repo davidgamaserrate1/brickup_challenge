@@ -5,9 +5,7 @@ import { useState } from 'react';
 import { TaskModal } from '../taskModal';
 
 export function TaskTittle({ description , type }){
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   const showModal = () => {
     setIsModalOpen(true);
