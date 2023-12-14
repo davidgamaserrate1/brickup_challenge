@@ -16,7 +16,6 @@ export function TaskCard(props){
                 </div>
                 <div  className='task_card__description'> {props.description} </div>
             </div>
-            
         </Card>
     )
 }
