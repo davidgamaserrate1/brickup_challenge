@@ -19,9 +19,9 @@ public class Task {
     private String description;
     
     @Column(nullable = false)
-    private String status;
-    
-    @Column(nullable = false)
+    private String status = "pendente";
+
+    @Column()
     private String photo;
 
 
