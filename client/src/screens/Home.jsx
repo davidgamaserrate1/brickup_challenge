@@ -31,7 +31,7 @@ export function Home() {
     
     useEffect(() => {
         getTasks();
-    });
+    },[]);
 
 
     const tasksPerPage = 4;
@@ -41,14 +41,14 @@ export function Home() {
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
         const pendingTasks = tasks.filter(task => task.status.toLowerCase() === 'pendente');
         const currentPendingTasks = pendingTasks.slice(indexOfFirstTask, indexOfLastTask);
-
+        
         return currentPendingTasks.map(task => (
             <TaskCard id={task.id}
                 key={task.id}
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo}
+                photo={task.photo?.replace('C:/Users/User/Documents/testes entrevistas/brickup_challenge/client/src/uploads/', '../../uploads/')}
             />
         ));
     };

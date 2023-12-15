@@ -48,9 +48,12 @@ public class TaskControler {
     }
     
     @PutMapping
-    public void updateTask(@RequestBody Task task){
-        if(task.getId()> 0)
+    public  ResponseEntity<Task> updateTask(@RequestBody Task task){
+        if(task.getId()> 0){
             repository.save(task);
+
+        }
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     @Value("${upload.path}") 
@@ -66,6 +69,8 @@ public class TaskControler {
                 }
 
                 String filePath = uploadPath + File.separator + "task_" + taskId + "_" + file.getOriginalFilename();
+                filePath = filePath.replace("\\", "/");
+
                 File dest = new File(filePath);
                 FileUtils.writeByteArrayToFile(dest, file.getBytes());
 
