@@ -51,8 +51,8 @@ public class TaskControler {
     public  ResponseEntity<Task> updateTask(@RequestBody Task task){
         if(task.getId()> 0){
             repository.save(task);
-
         }
+        
         return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
@@ -64,7 +64,7 @@ public class TaskControler {
         if (!file.isEmpty()) {
             try {                
                 File uploadDirectory = new File(uploadPath);
-                if (!uploadDirectory.exists()) {
+                if (!uploadDirectory.exists()) { 
                     uploadDirectory.mkdirs();
                 }
 
@@ -73,7 +73,6 @@ public class TaskControler {
 
                 File dest = new File(filePath);
                 FileUtils.writeByteArrayToFile(dest, file.getBytes());
-
                  
                 Task task = repository.findById(taskId).orElse(null);
                 if (task != null) {

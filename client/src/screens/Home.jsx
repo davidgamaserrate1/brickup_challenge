@@ -31,7 +31,7 @@ export function Home() {
     
     useEffect(() => {
         getTasks();
-    },[]);
+    },[tasks]);
 
 
     const tasksPerPage = 4;
@@ -48,8 +48,8 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo?.replace('C:/Users/User/Documents/testes entrevistas/brickup_challenge/client/src/uploads/', '../../uploads/')}
-            />
+                photo={task.photo?.replace('C:/Users/User/Documents/projetos/brickup_challenge/client/src/uploads/', '')}
+            /> 
         ));
     };
 
@@ -65,7 +65,7 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo}
+                photo={task.photo?.replace('C:/Users/User/Documents/projetos/brickup_challenge/client/src/uploads/', '')}
             />
         ));
     };
