@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +41,10 @@ public class TaskControler {
     }
 
     @PostMapping
-    public void saveTask(@RequestBody Task task){
+    public ResponseEntity<Task> saveTask(@RequestBody Task task){
         repository.save(task);
+
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
     
     @PutMapping
