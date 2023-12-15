@@ -31,7 +31,7 @@ export function Home() {
     
     useEffect(() => {
         getTasks();
-    },[tasks]);
+    });
 
 
     const tasksPerPage = 4;

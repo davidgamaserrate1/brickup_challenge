@@ -17,14 +17,14 @@ export function TaskModal({
     const [newTaskName, setNewTaskName] = useState(taskName);
     const [newTaskDescription, setNewTaskDescription] = useState(taskDescription);
     const [newTaskStatus, setNewTaskStatus] = useState(taskStatus || 'pendente');
-    const [pendingPhoto, setPendingPhoto] = useState(null); 
+    const [pendingPhoto, setPendingPhoto] = useState(taskPhoto); 
     
     const tittleModal = typeModal === 'edit' ? "Editar tarefa" : "Cadastrar tarefa";
 
     const normFile = (e) => {
         if (Array.isArray(e))  
             return e; 
-            
+
         return e?.fileList;
     };
 
@@ -55,28 +55,31 @@ export function TaskModal({
             })   
             .then((response) => response.json())    
             .then((response) => {
-                const idTask = response.id
-                const formData = new FormData();
-                formData.append('file', pendingPhoto);
+                console.log(pendingPhoto)
+                if(pendingPhoto){
+                    const idTask = response.id
+                    const formData = new FormData();
+                    formData.append('file', pendingPhoto);
 
-                fetch(`http://localhost:8080/task/upload/${idTask}`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response)
-                .then(data => {
-                    console.log('Resposta do backend:', data);
-                    
-                })
-                .finally(()=>handleOk())
-                .catch(error => {
-                    console.error('Erro ao enviar imagem:', {error});
-                });
+                    fetch(`http://localhost:8080/task/upload/${idTask}`, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response)
+                    .then(data => {
+                        console.log('Resposta do backend:', data);
+                        
+                    })
+                    .finally(()=>handleOk())
+                    .catch(error => {
+                        console.error('Erro ao enviar imagem:', {error});
+                    });
+                }
             })
             .catch(error => {
                 console.error('Erro :', error);
             });
-            ;
+            
          
     };
 
@@ -99,7 +102,7 @@ export function TaskModal({
             <TextArea placeholder="Descreva a tarefa" value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} />
            
             <Typography.Title style={{marginTop: 16}} level={5}>Status</Typography.Title>
-            <Select
+            <Select style={{width:'100%'}}
                 labelInValue
                 defaultValue={{ value: newTaskStatus, label: newTaskStatus }}
                 disabled={typeModal === 'edit' ? false : true}  
@@ -110,7 +113,7 @@ export function TaskModal({
                 ]}
             />
 
-            <Form>
+            <Form style={{marginTop: 16}}>
                 <Form.Item
                     name="imagem"
                     valuePropName="fileList"
