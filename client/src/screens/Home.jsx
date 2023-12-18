@@ -35,7 +35,7 @@ export function Home() {
 
 
     const tasksPerPage = 4;
-    
+    const path_upload= process.env.REACT_APP_UPLOAD_PATH
     const renderPendingTasks = () => {
         const indexOfLastTask = currentPendingPage * tasksPerPage;
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -48,7 +48,7 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo?.replace('C:/Users/User/Documents/projetos/brickup_challenge/client/src/uploads/', '')}
+                photo={task.photo?.replace(path_upload, '')}
             /> 
         ));
     };
@@ -65,7 +65,7 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo?.replace('C:/Users/User/Documents/projetos/brickup_challenge/client/src/uploads/', '')}
+                photo={task.photo?.replace(path_upload, '')}
             />
         ));
     };

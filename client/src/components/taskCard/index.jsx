@@ -26,16 +26,16 @@ export function TaskCard(props){
     return(
         <>
         <Card title={props.name}    className='task_card'>            
-            <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/> 
-            <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
-              {props.status} 
+          <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/> 
+          <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
+            {props.status} 
+          </div>
+          <div className="task_card_info">
+            <div className="task_card_img__div">                
+              <Image className="task_card_img" width={60} height={50} src={taskPhoto}  />
             </div>
-            <div className="task_card_info">
-              <div className="task_card_img__div">                
-                <Image className="task_card_img" width={60} height={50} src={taskPhoto}  />
-              </div>
-              <div  className='task_card__description'> {props.description} </div>
-            </div>                        
+            <div  className='task_card__description'> {props.description} </div>
+          </div>                        
         </Card>
         <TaskModal
             typeModal='edit'
