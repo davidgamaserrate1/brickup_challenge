@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from "react";
- 
 import './home-styles.css'
+
+import React, { useEffect, useState } from "react";
 import { TaskCard } from "../components/taskCard";
 import { ContainerTittle } from "../components/containerTittle";
 import { TaskTittle } from "../components/taskTittle";
-
 import { Divider, Input, Layout, Pagination, theme } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { saveTask, selectTasks } from "../store/slice/task";
 
 const { Content } = Layout;
 
 export function Home() {  
     const { token: { colorBgContainer }} = theme.useToken();
     
+    const dispatch = useDispatch()
+    const tasks = useSelector(selectTasks)
+
+
     const startCurrentPage = 1
-    const [tasks, setTasks] = useState([]);
+    
     const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
     const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);
     
@@ -22,8 +27,8 @@ export function Home() {
     const getTasks = async () => {
         try {
             const response = await fetch(TASK_URI);
-            const data = await response.json();
-            setTasks(data);
+            const data = await response.json();          
+            dispatch(saveTask(data))
         } catch (error) {
             console.error('Erro ao buscar tarefas:', error);
         }
@@ -31,9 +36,9 @@ export function Home() {
     
     useEffect(() => {
         getTasks();
-    });
+    } );
 
-
+    
     const tasksPerPage = 4;
     const path_upload= process.env.REACT_APP_UPLOAD_PATH
     const renderPendingTasks = () => {

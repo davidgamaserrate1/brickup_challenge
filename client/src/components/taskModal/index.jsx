@@ -67,6 +67,7 @@ export function TaskModal({
                 });
             }
         })
+        .finally(()=>handleOk())
         .catch(error => {
             console.error('Erro :', error);
         });
@@ -82,8 +83,10 @@ export function TaskModal({
         >
             <Typography.Title level={5} style={{marginTop: 16}}>Nome</Typography.Title>
             <Input placeholder="Nome da tarefa" value={newTaskName} onChange={(e) => setNewTaskName(e.target.value)} />
+
             <Typography.Title level={5} style={{marginTop: 16}}>Descrição</Typography.Title>
             <TextArea placeholder="Descreva a tarefa" value={newTaskDescription} onChange={(e) => setNewTaskDescription(e.target.value)} />
+
             <Typography.Title style={{marginTop: 16}} level={5}>Status</Typography.Title>
             <Select style={{width:'100%'}}
                 labelInValue
@@ -92,6 +95,7 @@ export function TaskModal({
                 onChange={(e) => {if (typeModal === 'edit') setNewTaskStatus(e.label)}} 
                 options={[ { value: 'pendente', label: 'pendente' }, { value: 'concluido', label: 'concluido' }] }
             />
+            
             <Form style={{marginTop: 16}}>
                 <Form.Item
                     name="imagem"
