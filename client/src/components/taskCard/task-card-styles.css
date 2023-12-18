@@ -26,19 +26,17 @@
     position: absolute;   
     left: 16px;
     top: 8px;
-    border: 1px solid rgb(1,1,1,0.1);
-    padding: 8px;
     border-radius: 8px;
     color: #fff;
     font-weight: bold;
 }
 
-.pending{
-    background-color: #f1c40f;
-}
+ 
 
 .completed{
     background-color: #a9d6a9;
+    padding: 8px;
+    border: 1px solid rgb(1,1,1,0.1);
 }
 
 .task_card_info{

@@ -1,6 +1,6 @@
 import './task-card-styles.css'
-import { Card, Image,  } from 'antd'
-import {EditOutlined} from '@ant-design/icons';
+import { Button, Card, Image, Popconfirm, message,  } from 'antd'
+import {CheckOutlined, EditOutlined} from '@ant-design/icons';
 
 import { useState } from 'react';
 import { TaskModal } from '../taskModal';
@@ -21,14 +21,38 @@ export function TaskCard(props){
       setIsModalOpen(false);
     };
     
+    const confirm = async() => {
+      const taskId = props.id
+      const taskConclued ={
+        id: taskId,
+        status:'concluido'
+      }
+      await fetch(process.env.REACT_APP_TASK_URI, {
+        method:'PUT',
+        headers:{'content-type':'application/json'},
+        body:JSON.stringify(taskConclued)
+      })
+      message.success('Tarefa concluída com sucesso!');
+    };
+
+    
     const taskPhoto = props.photo ? `http://localhost:8080/images/uploads/${props.photo}` : defaultImage
+    const status = props.status
     
     return(
         <>
-        <Card title={props.name}    className='task_card'>            
-          <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/> 
+        <Card title={props.name} className='task_card'>            
+          {status === 'pendente' && <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/>}
           <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
-            {props.status} 
+            {status === 'pendente' ?
+            <Popconfirm title="Concluir tarefa"
+              description="Deseja concluir esta tarefa?"
+              onConfirm={confirm}
+              okText="Sim"
+              cancelText="Não"
+            >
+              <Button >Concluir</Button>
+            </Popconfirm> : <><CheckOutlined /> Concluído </>}
           </div>
           <div className="task_card_info">
             <div className="task_card_img__div">                
@@ -37,6 +61,7 @@ export function TaskCard(props){
             <div  className='task_card__description'> {props.description} </div>
           </div>                        
         </Card>
+
         <TaskModal
             typeModal='edit'
             isModalOpen={isModalOpen}
