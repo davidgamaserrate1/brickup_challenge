@@ -28,7 +28,7 @@ export function TaskTittle({ description , type }){
   return(
       <>
         <Badge count={type=== 'pending'? countPendingTasks: countCompletedTasks}>
-        <Ribbon text={description} color={type=== 'pending'? 'blue': 'green'} >
+        <Ribbon text={description} style={{fontSize:'18px'}} color={type=== 'pending'? 'blue': 'green'} >
           <div className='task_tittle'> 
             {type=== 'pending' && <Button disabled={type !=='pending'} type="primary" shape="circle" 
               icon={<PlusOutlined />} 
