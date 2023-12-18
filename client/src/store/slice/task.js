@@ -26,5 +26,7 @@ const slice = createSlice({
 
 export const { saveTask, updateTaskDetails } = slice.actions;
 export const selectTasks = (state) => state.task
+export const selectCountPendingTasks = (state) => state.task.filter((task)=> task.status ==='pendente').length
+export const selectCountCompletedTasks = (state) => state.task.filter((task)=> task.status ==='concluido').length
 
 export default slice.reducer;

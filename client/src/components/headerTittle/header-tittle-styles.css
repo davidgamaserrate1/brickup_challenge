@@ -1,0 +1,9 @@
+.header_tittle{
+    color: #fff;
+    width: 100vw;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    justify-content: center;
+}

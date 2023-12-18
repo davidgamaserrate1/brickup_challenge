@@ -1,20 +1,16 @@
 import './home-styles.css'
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider, Layout, Pagination, theme } from "antd";
+import { Divider, Layout, Pagination } from "antd";
 import { TaskCard } from "../components/taskCard";
-import { ContainerTittle } from "../components/containerTittle";
 import { TaskTittle } from "../components/taskTittle";
 import { saveTask, selectTasks } from "../store/slice/task";
-
-
+import {HeaderTittle} from '../components/headerTittle' 
 
 export function Home() {  
     const dispatch = useDispatch()
     const tasks = useSelector(selectTasks)
-
-    const { Content } = Layout;
-    const { token: { colorBgContainer }} = theme.useToken();
+    const { Content } = Layout; 
 
     const startCurrentPage = 1
     const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
@@ -32,7 +28,7 @@ export function Home() {
 
     useEffect(() => {
         getTasks()
-    },[tasks]);
+    });
     
     const tasksPerPage = 4;
 
@@ -79,10 +75,12 @@ export function Home() {
     };
 
     return (
+        <>
+        <HeaderTittle />
         <Layout className="home_layout"> 
+            <div className="logo" />
             <Content className="home_content">
-                <div className="content_dashboard"  >
-                    <ContainerTittle tittle="Minhas tarefas"/>
+                <div className="content_dashboard">
                     <Divider/>
                     <div className="task_group">
                         <div className="task_group__pending"> 
@@ -111,9 +109,10 @@ export function Home() {
                         </div>
                     </div>
                     <Divider/>
-          
                 </div>
             </Content>
         </Layout>
+
+    </>        
     );
 }
