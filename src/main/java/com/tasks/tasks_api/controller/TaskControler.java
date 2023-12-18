@@ -48,14 +48,37 @@ public class TaskControler {
     }
     
     @PutMapping
-    public  ResponseEntity<Task> updateTask(@RequestBody Task task){
-        if(task.getId()> 0){
-            repository.save(task);
+    public ResponseEntity<Task> updateTask(@RequestBody Task updatedTask) {
+        if (updatedTask.getId() == null || updatedTask.getId() <= 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }    
+        
+        Task existingTask = repository.findById(updatedTask.getId()).orElse(null);
+    
+        if (existingTask == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         
-        return new ResponseEntity<>(task, HttpStatus.CREATED);
+        if (updatedTask.getName() != null) {
+            existingTask.setName(updatedTask.getName());
+        }
+    
+        if (updatedTask.getDescription() != null) {
+            existingTask.setDescription(updatedTask.getDescription());
+        }
+    
+        if (updatedTask.getStatus() != null) {
+            existingTask.setStatus(updatedTask.getStatus());
+        }
+    
+        if (updatedTask.getPhoto() != null) {
+            existingTask.setPhoto(updatedTask.getPhoto());
+        }    
+        
+        repository.save(existingTask);
+        return new ResponseEntity<>(existingTask, HttpStatus.OK);
     }
-
+    
     @Value("${upload.path}") 
     private String uploadPath;
 
