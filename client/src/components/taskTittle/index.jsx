@@ -23,7 +23,9 @@ export function TaskTittle({ description , type }){
       <>
         <div className='task_tittle'> 
           <div>{description}</div>
-          {type ==='pending' && <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={()=>showModal()} />}
+          {type ==='pending' && 
+            <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={()=>showModal()} />
+          }
         </div>
 
         <TaskModal 

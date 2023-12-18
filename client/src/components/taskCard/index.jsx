@@ -44,7 +44,8 @@ export function TaskCard(props){
         <Card title={props.name} className='task_card'>            
           {status === 'pendente' && <EditOutlined  className='task_card__edit' onClick={()=>showModal()}/>}
           <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
-            {status === 'pendente' ?
+          {
+            status === 'pendente' ?
             <Popconfirm title="Concluir tarefa"
               description="Deseja concluir esta tarefa?"
               onConfirm={confirm}
@@ -52,7 +53,8 @@ export function TaskCard(props){
               cancelText="Não"
             >
               <Button >Concluir</Button>
-            </Popconfirm> : <><CheckOutlined /> Concluído </>}
+            </Popconfirm> : <><CheckOutlined /> Concluído </>
+          }
           </div>
           <div className="task_card_info">
             <div className="task_card_img__div">                
@@ -62,17 +64,17 @@ export function TaskCard(props){
           </div>                        
         </Card>
 
-        <TaskModal
-            typeModal='edit'
-            isModalOpen={isModalOpen}
-            handleOk={handleOk}
-            handleCancel={handleCancel}
-            taskId={props.id}
-            taskName={props.name}
-            taskPhoto={props.photo}
-            taskDescription={props.description}
-            taskStatus={props.status}
+        <TaskModal 
+          typeModal='edit'
+          isModalOpen={isModalOpen}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+          taskId={props.id}
+          taskName={props.name}
+          taskPhoto={props.photo}
+          taskDescription={props.description}
+          taskStatus={props.status}
         />
-        </>
+      </>
     )
 }

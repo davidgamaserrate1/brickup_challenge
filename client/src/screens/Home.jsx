@@ -1,25 +1,25 @@
 import './home-styles.css'
-
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Divider, Input, Layout, Pagination, theme } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { TaskCard } from "../components/taskCard";
 import { ContainerTittle } from "../components/containerTittle";
 import { TaskTittle } from "../components/taskTittle";
-import { Divider, Input, Layout, Pagination, theme } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
 import { saveTask, selectTasks } from "../store/slice/task";
 
-const { Content } = Layout;
+
 
 export function Home() {  
+    const dispatch = useDispatch()
+    const tasks = useSelector(selectTasks)
+
+    const { Content } = Layout;
     const { token: { colorBgContainer }} = theme.useToken();
-    
-    
+
     const startCurrentPage = 1
     const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
     const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);    
-    const dispatch = useDispatch()
-    const tasks = useSelector(selectTasks)
     
     const getTasks = async () => {
         try {
@@ -30,14 +30,13 @@ export function Home() {
             console.error('Erro ao buscar tarefas:', error);
         }
     };
-    
-    useEffect(() => {
-        getTasks();
-    },[tasks, ] );
 
+    useEffect(() => {
+        getTasks()
+    },[tasks]);
     
     const tasksPerPage = 4;
-    const path_upload= process.env.REACT_APP_UPLOAD_PATH
+
     const renderPendingTasks = () => {
         const indexOfLastTask = currentPendingPage * tasksPerPage;
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -50,11 +49,11 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo?.replace(path_upload, '')}
+                photo={task.photo?.replace(process.env.REACT_APP_UPLOAD_PATH, '')}
             /> 
         ));
     };
-
+    
     const renderCompletedTasks = () => {
         const indexOfLastTask = currentCompletedPage * tasksPerPage;
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -67,7 +66,7 @@ export function Home() {
                 name={task.name}
                 description={task.description}
                 status={task.status}
-                photo={task.photo?.replace(path_upload, '')}
+                photo={task.photo?.replace(process.env.REACT_APP_UPLOAD_PATH, '')}
             />
         ));
     };
@@ -89,7 +88,6 @@ export function Home() {
                         <Input  size="large" placeholder="Pesquisar por nome" prefix={<SearchOutlined />} />
                     </div>
                     <Divider/>
-
                     <div className="task_group">
                         <div className="task_group__pending"> 
                             <TaskTittle description="Pendentes" type="pending" /> 
@@ -102,8 +100,7 @@ export function Home() {
                                 pageSize={tasksPerPage}
                                 onChange={handlePendingPageChange}
                             />
-                        </div>
-                         
+                        </div>                         
                         <div className="task_group__completed"> 
                             <TaskTittle description="Finalizadas" type="completed" />                         
                             {renderCompletedTasks()}  

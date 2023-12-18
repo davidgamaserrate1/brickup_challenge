@@ -12,7 +12,6 @@ export function TaskModal({
     handleCancel,
     taskId,
     taskName,
-    taskPhoto,
     taskDescription,
     taskStatus,
 }) {
@@ -24,8 +23,7 @@ export function TaskModal({
     const tittleModal = typeModal === 'edit' ? "Editar tarefa" : "Cadastrar tarefa";
 
     const normFile = (e) => {
-        return Array.isArray(e) ? e 
-            : e?.fileList;
+        return Array.isArray(e) ? e : e?.fileList;
     };
 
     const SEND_URL = process.env.REACT_APP_TASK_URI;

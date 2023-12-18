@@ -5,7 +5,7 @@ const slice = createSlice({
     initialState: [],
     reducers:{
         saveTask(_, { payload })  {  
-            return [...payload].reverse();
+            return [...payload];
         },
         updateTaskDetails(state, action) {
             const { taskId, newName, newDescription, newPhoto } = action.payload;                       
@@ -24,12 +24,7 @@ const slice = createSlice({
     }
 })
 
-export const {
-    saveTask,
-    updateTaskDetails 
-} = slice.actions;
-
+export const { saveTask, updateTaskDetails } = slice.actions;
 export const selectTasks = (state) => state.task
-
 
 export default slice.reducer;
