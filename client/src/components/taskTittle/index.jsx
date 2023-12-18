@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import './task-tittle-styles.css'
-import { Badge, Button } from 'antd'
+import { Badge, Button, Tooltip } from 'antd'
 import { useState } from 'react';
 import { TaskModal } from '../taskModal';
 import Ribbon from 'antd/es/badge/Ribbon';
@@ -26,23 +26,26 @@ export function TaskTittle({ description , type }){
   const countCompletedTasks = useSelector( selectCountCompletedTasks )
 
   return(
-      <>
-        <Badge count={type=== 'pending'? countPendingTasks: countCompletedTasks}>
+    <>
+      <Badge count={type=== 'pending'? countPendingTasks: countCompletedTasks}>
         <Ribbon text={description} style={{fontSize:'18px'}} color={type=== 'pending'? 'blue': 'green'} >
           <div className='task_tittle'> 
-            {type=== 'pending' && <Button disabled={type !=='pending'} type="primary" shape="circle" 
-              icon={<PlusOutlined />} 
-              onClick={()=>showModal()} 
-            />}
-          </div>  
+            {type=== 'pending' && 
+            <Tooltip  title="Adicionar tarefa"> 
+              <Button disabled={type !=='pending'} type="primary" shape="circle" 
+                icon={<PlusOutlined />} 
+                onClick={()=>showModal()} 
+              />
+            </Tooltip>}
+          </div> 
         </Ribbon> 
-        </Badge>
+      </Badge>
 
-        <TaskModal 
-          isModalOpen={isModalOpen}
-          handleOk={handleOk}
-          handleCancel={handleCancel}
-          />
-      </>
+      <TaskModal 
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        />
+    </>
   )
 }

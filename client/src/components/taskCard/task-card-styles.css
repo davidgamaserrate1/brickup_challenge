@@ -12,7 +12,7 @@
 .task_card__edit{
     position: absolute;   
     right: 16px;
-    top: 16px;
+    top: 8px;
     font-size: 24px;
     &:hover{
         cursor: pointer;
@@ -31,10 +31,15 @@
     font-weight: bold;
 }
 
-.completed{
-    background-color: #a9d6a9;
-    padding: 8px;
+.completed{    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #52C41A;
+    padding: 4px;
+    font-weight: 400;
     border: 1px solid rgb(1,1,1,0.1);
+    gap: 4px;
 }
 
 .task_card_info{
