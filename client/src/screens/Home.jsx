@@ -14,19 +14,16 @@ const { Content } = Layout;
 export function Home() {  
     const { token: { colorBgContainer }} = theme.useToken();
     
+    
+    const startCurrentPage = 1
+    const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
+    const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);    
     const dispatch = useDispatch()
     const tasks = useSelector(selectTasks)
-
-
-    const startCurrentPage = 1
     
-    const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
-    const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);
-    
-    const TASK_URI = process.env.REACT_APP_TASK_URI;
     const getTasks = async () => {
         try {
-            const response = await fetch(TASK_URI);
+            const response = await fetch(process.env.REACT_APP_TASK_URI);
             const data = await response.json();          
             dispatch(saveTask(data))
         } catch (error) {
@@ -36,7 +33,7 @@ export function Home() {
     
     useEffect(() => {
         getTasks();
-    } );
+    },[tasks, ] );
 
     
     const tasksPerPage = 4;

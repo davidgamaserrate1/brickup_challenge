@@ -2,6 +2,8 @@ import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Select, Typography, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { useDispatch } from "react-redux";
+import { updateTaskDetails } from "../../store/slice/task";
 
 export function TaskModal({
     typeModal,
@@ -27,6 +29,8 @@ export function TaskModal({
     };
 
     const SEND_URL = process.env.REACT_APP_TASK_URI;
+
+    const dispatch = useDispatch()
 
     const handleSaveTask = async() => {
         let task = {
@@ -65,7 +69,10 @@ export function TaskModal({
                 .catch(error => {
                     console.error('Erro ao enviar imagem:', {error});
                 });
+
+                dispatch(updateTaskDetails(formData))
             }
+            dispatch(updateTaskDetails(task))
         })
         .finally(()=>handleOk())
         .catch(error => {

@@ -6,14 +6,30 @@ const slice = createSlice({
     reducers:{
         saveTask(_, { payload })  {  
             return [...payload].reverse();
-        }
+        },
+        updateTaskDetails(state, action) {
+            const { taskId, newName, newDescription, newPhoto } = action.payload;                       
+            return state.map(task => {
+                if (task.id === taskId) {
+                    return {
+                        ...task,
+                        name: newName !== task.name ? newName : task.name,
+                        description: newDescription !== task.description ? newDescription : task.description,
+                        photo : newPhoto !== task.photo ?  newPhoto : task.photo                  
+                    };
+                }
+                return task;
+            });
+        } 
     }
 })
 
 export const {
-    saveTask
+    saveTask,
+    updateTaskDetails 
 } = slice.actions;
 
 export const selectTasks = (state) => state.task
+
 
 export default slice.reducer;
