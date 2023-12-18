@@ -46,8 +46,8 @@ export function TaskCard(props){
           <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
           {
             status === 'pendente' ?
-            <Popconfirm title="Concluir tarefa"
-              description="Deseja concluir esta tarefa?"
+            <Popconfirm title="Concluir tarefa?"
+              description="Esta tarefa não poderá ser alterada"
               onConfirm={confirm}
               okText="Sim"
               cancelText="Não"

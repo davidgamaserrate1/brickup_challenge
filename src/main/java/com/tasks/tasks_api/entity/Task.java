@@ -24,8 +24,6 @@ public class Task {
     @Column()
     private String photo;
 
-
-
     public Long getId() { 
         return id;
     }

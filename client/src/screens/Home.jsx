@@ -28,7 +28,7 @@ export function Home() {
 
     useEffect(() => {
         getTasks()
-    });
+    },[tasks]);
     
     const tasksPerPage = 4;
 
@@ -84,7 +84,7 @@ export function Home() {
                     <Divider/>
                     <div className="task_group">
                         <div className="task_group__pending"> 
-                            <TaskTittle description="Pendentes" type="pending" /> 
+                            <TaskTittle description="Pendentes" type="pending" />                             
                             {renderPendingTasks()} 
                             <Pagination
                                 className="task_group__pending__pagination"
@@ -94,9 +94,10 @@ export function Home() {
                                 pageSize={tasksPerPage}
                                 onChange={handlePendingPageChange}
                             />
+                            {tasks.filter(task => task.status === 'pendente').length <1 && <div>Nenhuma atividade cadastrada</div>    }
                         </div>                         
                         <div className="task_group__completed"> 
-                            <TaskTittle description="Finalizadas" type="completed" />                         
+                            <TaskTittle description="Finalizadas" type="completed" />
                             {renderCompletedTasks()}  
                             <Pagination
                                 className="task_group__pending__pagination"
@@ -106,6 +107,7 @@ export function Home() {
                                 pageSize={tasksPerPage}
                                 onChange={handleCompletedPageChange}
                             />
+                        {tasks.filter(task => task.status === 'concluido').length <1 && <div>Nenhuma atividade finalizada</div>    }
                         </div>
                     </div>
                     <Divider/>

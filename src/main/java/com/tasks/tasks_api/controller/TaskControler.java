@@ -53,7 +53,7 @@ public class TaskControler {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }    
         
-        Task existingTask = repository.findById(updatedTask.getId()).orElse(null);
+        Task existingTask = repository.findById(updatedTask.getId());
     
         if (existingTask == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -97,7 +97,7 @@ public class TaskControler {
                 File dest = new File(filePath);
                 FileUtils.writeByteArrayToFile(dest, file.getBytes());
                  
-                Task task = repository.findById(taskId).orElse(null);
+                Task task = repository.findById(taskId);
                 if (task != null) {
                     task.setPhoto(filePath);  
                     repository.save(task);
