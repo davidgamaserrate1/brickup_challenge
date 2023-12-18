@@ -1,8 +1,7 @@
 import './home-styles.css'
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider, Input, Layout, Pagination, theme } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Divider, Layout, Pagination, theme } from "antd";
 import { TaskCard } from "../components/taskCard";
 import { ContainerTittle } from "../components/containerTittle";
 import { TaskTittle } from "../components/taskTittle";
@@ -53,7 +52,7 @@ export function Home() {
             /> 
         ));
     };
-    
+
     const renderCompletedTasks = () => {
         const indexOfLastTask = currentCompletedPage * tasksPerPage;
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -82,11 +81,8 @@ export function Home() {
     return (
         <Layout className="home_layout"> 
             <Content className="home_content">
-                <div className="content_dashboard" style={{background:colorBgContainer}} >
+                <div className="content_dashboard"  >
                     <ContainerTittle tittle="Minhas tarefas"/>
-                    <div className="search_task" >
-                        <Input  size="large" placeholder="Pesquisar por nome" prefix={<SearchOutlined />} />
-                    </div>
                     <Divider/>
                     <div className="task_group">
                         <div className="task_group__pending"> 
@@ -115,6 +111,7 @@ export function Home() {
                         </div>
                     </div>
                     <Divider/>
+          
                 </div>
             </Content>
         </Layout>

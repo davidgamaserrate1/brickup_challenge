@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import './task-tittle-styles.css'
-import { Button } from 'antd'
+import { Avatar, Badge, Button } from 'antd'
 import { useState } from 'react';
 import { TaskModal } from '../taskModal';
 
@@ -21,18 +21,21 @@ export function TaskTittle({ description , type }){
 
   return(
       <>
-        <div className='task_tittle'> 
-          <div>{description}</div>
-          {type ==='pending' && 
-            <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={()=>showModal()} />
-          }
-        </div>
+        <Badge.Ribbon text= {description} color={type=== 'pending'? 'blue': 'green'} >
+          <div className='task_tittle'> 
+            <Button disabled={type !=='pending'} type="primary" shape="circle" 
+              icon={<PlusOutlined />} 
+              onClick={()=>showModal()} 
+            />
+         </div>  
+          
+         </Badge.Ribbon> 
 
         <TaskModal 
           isModalOpen={isModalOpen}
           handleOk={handleOk}
           handleCancel={handleCancel}
-        />
+          />
       </>
   )
 }
