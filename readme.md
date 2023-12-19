@@ -1,18 +1,58 @@
 # Desafio Técnico - Brickup
 
-Este é um exemplo de API de Tarefas desenvolvida como parte do desafio técnico proposto pela Brickup. Esta parte corresponde ao back-end da aplicação 
+* Repositório para disponibilização da resolução da prova tecnica
+---
+### O projeto desenvolvido conta com um design realizado no Figma - [Visualizar](https://www.figma.com/file/Ac4hZCAbQ65sjxi48bj8l2/Brickup---Tarefas?type=design&node-id=0-1&mode=design)
+---
+## 
 
-## Entidade Task
+## 🎨 Funcionalidades
+> Principais serviços disponiveis no sistema:
+- Cadastrar atividade
+- Editar atividade
 
-A entidade `Task` representa uma tarefa com os seguintes campos:
+## 💻 Pré-requisitos
 
-- `id` (Long): Identificador único da tarefa.
-- `name` (String): Nome da tarefa.
-- `description` (String): Descrição da tarefa.
-- `status` (String): Status atual da tarefa.
-- `photo` (String): URL da foto relacionada à tarefa.
+> Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
-## Métodos Disponíveis
+* [Versão mais recente do `Node` .](https://nodejs.org/en/download)
+* [Apache Maven 4.0.0](https://maven.apache.org/download.cgi)
+* [Java 21](https://www.oracle.com/br/java/technologies/downloads/)
+
+## ✨ Iniciar a aplicação 
+> **Parte 1** - Baixe o código do repositório (usando o `GIT`)  
+```bash
+    git clone https://github.com/davidgamaserrate1/brickup_challenge.git
+    cd brickup_challenge
+```
+ 
+ **Parte 2** - executar o backend spring boot
+```bash
+ mvn spring-boot:run
+
+```
+
+**Parte 3** - Instalar as dependências do front-end
+```bash
+cd client
+npm install 
+```
+**Parte 4** - Iniciar aplicação front end
+```bash
+
+npm start 
+```
+---
+ 
+## Portas das aplicações
+
+| app        | port |
+| ---------- | ---- |
+| front-end  | 3000 |
+| back-end   | 8080 |
+
+
+## Back-end - Métodos Disponíveis
 
 ### Listar Todas as Tarefas
 - **Endpoint:** `GET /task`
@@ -47,3 +87,7 @@ A entidade `Task` representa uma tarefa com os seguintes campos:
         "photo": "URL_da_nova_imagem"
     }
     ```
+### Visualizar imagem da task
+- **Endpoint:** `GET /task`
+- **Descrição:** Retorna a imagem salva no campo photo da task.
+- **Exemplo de Uso:** `http://localhost:8080/images//uploads/{imageName}`
