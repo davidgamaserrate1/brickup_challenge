@@ -24,11 +24,7 @@ export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,ta
     };
     
     const handleSaveTask = async() => {
-        const reset = ()=>{
-            setNewTaskName(undefined)
-            setNewTaskDescription(undefined)
-            setError(false)
-        }
+     
         if (!task?.name || !task?.description ){
             setError(true);
             return;
@@ -57,12 +53,9 @@ export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,ta
                 .catch(error => {
                     console.error('Erro ao enviar imagem:', {error});
                 });
-
                 dispatch(updateTaskDetails(formData))
-                reset()
             }
             dispatch(updateTaskDetails(task))
-            reset()
             handleOk()
         })
         .catch(error => {
