@@ -30,7 +30,7 @@ export function Home() {
         getTasks()
     },[tasks]);
     
-    const tasksPerPage = 4;
+    const tasksPerPage = 3;
 
     const renderPendingTasks = () => {
         const indexOfLastTask = currentPendingPage * tasksPerPage;
