@@ -30,6 +30,7 @@ const slice = createSlice({
                 ...state,
                 isOpen: false, 
                 typeModal: undefined,
+                titleModal:undefined,
                 taskId: undefined,
                 name: undefined,
                 description: undefined,

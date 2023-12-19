@@ -12,20 +12,19 @@ import { TaskModal } from '../components/taskModal';
 export function Home() {  
     const { Content } = Layout; 
     const dispatch = useDispatch()
-    const tasks = useSelector(selectTasks)
+    const tasks = useSelector(selectTasks)    
     const taskModal = useSelector(selectTaskModal)
-    
+
     const startCurrentPage = 1
     const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
     const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);    
-    const getTasks = async () => {
+    
+    const getTasks = async() => {
         try {
             const response = await fetch(process.env.REACT_APP_TASK_URI);
             const data = await response.json();          
             dispatch(saveTask(data))
-        } catch (error) {
-            console.error('Erro ao buscar tarefas:', error);
-        }
+        } catch (error) { console.error('Erro ao buscar tarefas:', error) }
     };
 
     useEffect(() => {
@@ -85,8 +84,7 @@ export function Home() {
                         <div className="task_group__pending"> 
                             <TaskTittle description="Pendentes" type="pending" />                             
                             {renderPendingTasks()} 
-                            <Pagination
-                                className="task_group__pending__pagination"
+                            <Pagination className="task_group__pending__pagination"
                                 current={currentPendingPage}
                                 defaultCurrent={1}
                                 total={tasks.filter(task => task.status === 'pendente').length}
@@ -98,15 +96,14 @@ export function Home() {
                         <div className="task_group__completed"> 
                             <TaskTittle description="Finalizadas" type="completed" />
                             {renderCompletedTasks()}  
-                            <Pagination
-                                className="task_group__pending__pagination"
+                            <Pagination className="task_group__pending__pagination"
                                 current={currentCompletedPage}
                                 defaultCurrent={1}
                                 total={tasks.filter(task => task.status === 'concluido').length}
                                 pageSize={tasksPerPage}
                                 onChange={handleCompletedPageChange}
                             />
-                        {tasks.filter(task => task.status === 'concluido').length <1 && <div>Nenhuma atividade finalizada</div>}
+                            {tasks.filter(task => task.status === 'concluido').length <1 && <div>Nenhuma atividade finalizada</div>}
                         </div>
                     </div>
                     <Divider/>
