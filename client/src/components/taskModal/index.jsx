@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Select, Typography, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateTaskDetails } from "../../store/slice/task";
+import { removeTaskModal, selectTaskModal } from "../../store/slice/modal";
 
-export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,taskName,taskDescription,taskStatus,}) {
-    const dispatch = useDispatch()
-    const [newTaskName, setNewTaskName] = useState(taskName);
-    const [newTaskDescription, setNewTaskDescription] = useState(taskDescription|| null);
-    const [newTaskStatus, setNewTaskStatus] = useState(taskStatus || 'pendente');
-    const [pendingPhoto, setPendingPhoto] = useState(null); 
+export function TaskModal() {   
+    const taskModal = useSelector(selectTaskModal)
+    const [sended, setSended]= useState(false)
+    const [newTaskName, setNewTaskName] = useState(taskModal.name);
+    const [newTaskDescription, setNewTaskDescription] = useState(taskModal.description);
+    const [newTaskStatus, setNewTaskStatus] = useState(taskModal.status || 'pendente');
+    const [pendingPhoto, setPendingPhoto] = useState(undefined); 
     const [error, setError] = useState(false)
-    const tittleModal = typeModal === 'edit' ? "Editar tarefa" : "Cadastrar tarefa";
+    const tittleModal = taskModal.titleModal;
+
+    const dispatch = useDispatch()
+    const handleClose = () =>{
+        setSended(true)
+        dispatch(removeTaskModal())  
+    }
+    useEffect(() => {
+        setNewTaskName(taskModal.name || '');
+        setNewTaskDescription(taskModal.description || '');
+        setNewTaskStatus(taskModal.status || 'pendente');        
+    }, [taskModal,sended]);  
 
     const normFile = (e) => {
         return Array.isArray(e) ? e : e?.fileList;
@@ -24,14 +37,13 @@ export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,ta
     };
     
     const handleSaveTask = async() => {
-     
         if (!task?.name || !task?.description ){
             setError(true);
             return;
         }
-        if (typeModal === 'edit') task = {...task, id: taskId};        
+        if (taskModal.typeModal === 'edit') task = {...task, id: taskModal.taskId};
         
-        const method = typeModal === 'edit' ? 'PUT' : 'POST';
+        const method = taskModal.typeModal === 'edit' ? 'PUT' : 'POST';
         await fetch(process.env.REACT_APP_TASK_URI, {
             method: method,
             headers: {
@@ -49,24 +61,26 @@ export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,ta
                     method: 'POST',
                     body: formData
                 })
-                .finally(()=>handleOk())
+                .finally(()=>handleClose())
                 .catch(error => {
                     console.error('Erro ao enviar imagem:', {error});
                 });
                 dispatch(updateTaskDetails(formData))
             }
             dispatch(updateTaskDetails(task))
-            handleOk()
+            handleClose()
         })
         .catch(error => {
             console.error('Erro :', error);
         })
+        setSended(true)
+
     };
  
     return (
-        <Modal title={tittleModal} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
+        <Modal   title={tittleModal} open={ taskModal.isOpen }  onOk={ handleClose} onCancel={ handleClose}
           footer={[
-            <Button key="back" onClick={handleCancel}>Cancelar</Button>,
+            <Button key="back" onClick={handleClose}>Cancelar</Button>,
             <Button key="submit" type="primary"    onClick={handleSaveTask}>Salvar</Button>
           ]}
         >
@@ -75,15 +89,15 @@ export function TaskModal({typeModal,isModalOpen,handleOk,handleCancel,taskId,ta
             <Input enterButton placeholder="Nome da tarefa" value={newTaskName} onChange={(e) =>setNewTaskName(e.target.value)} />
             
             <Typography.Title level={5} style={{marginTop: 16}}>Descrição</Typography.Title>
-            {error  && <span style={{color:'red'}}>* Por favor, preencha o nome da tarefa</span>}
+            {error  && <span style={{color:'red'}}>* Por favor, preencha a descrição da tarefa</span>}
             <TextArea placeholder="Descreva a tarefa" value={newTaskDescription} onChange={(e) =>setNewTaskDescription(e.target.value)} />
 
             <Typography.Title style={{marginTop: 16}} level={5}>Status</Typography.Title>
             <Select style={{width:'100%'}}
                 labelInValue
                 defaultValue={{ value: newTaskStatus, label: newTaskStatus }}
-                disabled={typeModal === 'edit' ? false : true}  
-                onChange={(e) => {if (typeModal === 'edit') setNewTaskStatus(e.label)}} 
+                disabled={taskModal.typeModal === 'edit' ? false : true}  
+                onChange={(e) => {if (taskModal.typeModal === 'edit') setNewTaskStatus(e.label)}} 
                 options={[ { value: 'pendente', label: 'pendente' }, { value: 'concluido', label: 'concluido' }] }
             />
             <Form style={{marginTop: 16}}>

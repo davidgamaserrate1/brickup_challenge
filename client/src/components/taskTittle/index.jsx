@@ -1,51 +1,37 @@
-import { PlusOutlined } from '@ant-design/icons'
 import './task-tittle-styles.css'
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { Badge, Button, Tooltip } from 'antd'
-import { useState } from 'react';
-import { TaskModal } from '../taskModal';
 import Ribbon from 'antd/es/badge/Ribbon';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCountCompletedTasks, selectCountPendingTasks } from '../../store/slice/task';
+import { saveTaskModal } from '../../store/slice/modal';
 
 export function TaskTittle({ description , type }){
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const dispatch = useDispatch()
+  
   const showModal = () => {
-    setIsModalOpen(true);
+    const task = {
+      isOpen: true,
+      titleModal:"Cadastrar tarefa" ,
+    }
+    dispatch(saveTaskModal(task))
   };
   
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const countPendingTasks = useSelector( selectCountPendingTasks )
+  const countPendingTasks   = useSelector( selectCountPendingTasks )
   const countCompletedTasks = useSelector( selectCountCompletedTasks )
 
   return(
-    <>
-      <Badge count={type=== 'pending'? countPendingTasks: countCompletedTasks}>
-        <Ribbon text={description} style={{fontSize:'18px'}} color={type=== 'pending'? 'blue': 'green'} >
-          <div className='task_tittle'> 
-            {type=== 'pending' && 
-            <Tooltip  title="Adicionar tarefa"> 
-              <Button disabled={type !=='pending'} type="primary" shape="circle" 
-                icon={<PlusOutlined />} 
-                onClick={()=>showModal()} 
+    <Badge count={type=== 'pending'? countPendingTasks: countCompletedTasks}>
+      <Tooltip className='task_card__edit' title="Editar tarefa"><EditOutlined onClick={()=>showModal()}/></Tooltip>  
+      <Ribbon text={description} style={{fontSize:'18px'}} color={type=== 'pending'? 'blue': 'green'} >      
+        <div className='task_tittle'> {type=== 'pending' && 
+          <Tooltip  title="Adicionar tarefa"> 
+            <Button disabled={type !=='pending'} type="primary" shape="circle" icon={<PlusOutlined />} 
+              onClick={()=>showModal()}
               />
-            </Tooltip>}
-          </div> 
-        </Ribbon> 
-      </Badge>
-
-      <TaskModal 
-        isModalOpen={isModalOpen}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        />
-    </>
+          </Tooltip>}
+        </div> 
+      </Ribbon> 
+    </Badge>
   )
 }

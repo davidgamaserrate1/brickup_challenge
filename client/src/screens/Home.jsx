@@ -6,16 +6,18 @@ import { TaskCard } from "../components/taskCard";
 import { TaskTittle } from "../components/taskTittle";
 import { saveTask, selectTasks } from "../store/slice/task";
 import {HeaderTittle} from '../components/headerTittle' 
+import { selectTaskModal } from '../store/slice/modal';
+import { TaskModal } from '../components/taskModal';
 
 export function Home() {  
+    const { Content } = Layout; 
     const dispatch = useDispatch()
     const tasks = useSelector(selectTasks)
-    const { Content } = Layout; 
-
+    const taskModal = useSelector(selectTaskModal)
+    
     const startCurrentPage = 1
     const [currentPendingPage, setCurrentPendingPage] = useState(startCurrentPage);
     const [currentCompletedPage, setCurrentCompletedPage] = useState(startCurrentPage);    
-    
     const getTasks = async () => {
         try {
             const response = await fetch(process.env.REACT_APP_TASK_URI);
@@ -28,10 +30,9 @@ export function Home() {
 
     useEffect(() => {
         getTasks()
-    });
+    },[taskModal]);
     
     const tasksPerPage = 3;
-
     const renderPendingTasks = () => {
         const indexOfLastTask = currentPendingPage * tasksPerPage;
         const indexOfFirstTask = indexOfLastTask - tasksPerPage;
@@ -73,12 +74,10 @@ export function Home() {
     const handleCompletedPageChange = (page) => {
         setCurrentCompletedPage(page);
     };
-
     return (
         <>
         <HeaderTittle />
         <Layout className="home_layout"> 
-            <div className="logo" />
             <Content className="home_content">
                 <div className="content_dashboard">
                     <Divider/>
@@ -94,7 +93,7 @@ export function Home() {
                                 pageSize={tasksPerPage}
                                 onChange={handlePendingPageChange}
                             />
-                            {tasks.filter(task => task.status === 'pendente').length <1 && <div>Nenhuma atividade cadastrada</div>    }
+                            {tasks.filter(task => task.status === 'pendente').length <1 && <div>Nenhuma atividade cadastrada</div>}
                         </div>                         
                         <div className="task_group__completed"> 
                             <TaskTittle description="Finalizadas" type="completed" />
@@ -107,14 +106,13 @@ export function Home() {
                                 pageSize={tasksPerPage}
                                 onChange={handleCompletedPageChange}
                             />
-                        {tasks.filter(task => task.status === 'concluido').length <1 && <div>Nenhuma atividade finalizada</div>    }
+                        {tasks.filter(task => task.status === 'concluido').length <1 && <div>Nenhuma atividade finalizada</div>}
                         </div>
                     </div>
                     <Divider/>
                 </div>
             </Content>
         </Layout>
-
-    </>        
-    );
-}
+        <TaskModal />
+        </>        
+    );}
