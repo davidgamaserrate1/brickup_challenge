@@ -1,30 +1,30 @@
 import './task-card-styles.css'
 import { Button, Card, Image, Popconfirm, Tooltip, message,  } from 'antd'
 import {CheckOutlined, EditOutlined} from '@ant-design/icons';
-
-import { useState } from 'react';
-import { TaskModal } from '../taskModal';
 import defaultImage from '../../uploads/default_image.png'
+import { removeTaskModal, saveTaskModal } from '../../store/slice/modal';
+import { useDispatch } from 'react-redux';
 
-export function TaskCard(props){   
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export function TaskCard(props){
+  const dispatch = useDispatch()
+
+  const task = {
+    isOpen: true,
+    titleModal : 'Editar tarefa',
+    typeModal :'edit',
+    taskId : props.id,
+    name: props.name,
+    description : props.description,
+    status : props.status 
+  }
 
   const showModal = () => {
-    setIsModalOpen(true);
-  };
-  
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+    dispatch(saveTaskModal(task))
   };
   
   const confirm = async() => {
-    const taskId = props.id
-    const taskConclued ={
-      id: taskId,
+    const taskConclued ={ 
+      id: props.id,
       status:'concluido'
     }
     await fetch(process.env.REACT_APP_TASK_URI, {
@@ -33,33 +33,28 @@ export function TaskCard(props){
       body:JSON.stringify(taskConclued)
     })
     message.success('Tarefa concluída com sucesso!');
+    dispatch(removeTaskModal())  
   };
-
   
   const taskPhoto = props.photo ? `http://localhost:8080/images/uploads/${props.photo}` : defaultImage
   const status = props.status
-    
+
   return(
-    <>
       <Card title={props.name} className='task_card'>            
         {status === 'pendente' && 
         <Tooltip className='task_card__edit' title="Editar tarefa"><EditOutlined onClick={()=>showModal()}/></Tooltip> }
         <div className={`task_card__status ${props.status === 'pendente' ? 'pending' : 'completed'}`} >
-        {
-          status === 'pendente' ?
+          {status === 'pendente' ?
           <Popconfirm title="Concluir tarefa?"
             description="Esta tarefa não poderá ser alterada"
             onConfirm={confirm}
             okText="Sim"
             cancelText="Não"
           >
-          <Tooltip title="Concluir tarefa">
-            <Button >Concluir</Button>
-          </Tooltip>
-          </Popconfirm> : 
-          <>
-            <CheckOutlined /> Concluído 
-          </>
+            <Tooltip title="Concluir tarefa">
+              <Button >Concluir</Button>
+            </Tooltip>
+          </Popconfirm> : <><CheckOutlined /> Concluído </>
         }
         </div>
         <div className="task_card_info">
@@ -69,18 +64,4 @@ export function TaskCard(props){
           <div  className='task_card__description'> {props.description} </div>
         </div>                        
       </Card>
-
-      <TaskModal 
-        typeModal='edit'
-        isModalOpen={isModalOpen}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        taskId={props.id}
-        taskName={props.name}
-        taskPhoto={props.photo}
-        taskDescription={props.description}
-        taskStatus={props.status}
-      />
-    </>
-  )
-}
+  )}
