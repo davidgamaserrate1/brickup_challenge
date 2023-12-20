@@ -5,6 +5,7 @@
 </br>
 
 ###  O projeto desenvolvido conta com um design realizado no Figma - [Visualizar](https://www.figma.com/file/Ac4hZCAbQ65sjxi48bj8l2/Brickup---Tarefas?type=design&node-id=0-1&mode=design)
+###  Vídeo da aplicação [Visualizar](https://drive.google.com/drive/folders/1nbWlnLmAqBKxIHutkeYmYPb_rc_HcfFM?usp=sharing)
 ---
 ## 🎨 Funcionalidades
 > Principais serviços disponiveis no sistema:
