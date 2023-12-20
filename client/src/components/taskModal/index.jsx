@@ -1,41 +1,35 @@
 import { useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Select, Typography, Upload } from "antd";
+import { Button, Input, Modal, Select, Typography, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTaskDetails } from "../../store/slice/task";
 import { removeTaskModal, selectTaskModal } from "../../store/slice/modal";
 
 export function TaskModal() {   
-    const taskModal = useSelector(selectTaskModal)
-    const [sended, setSended]= useState(false)
+    const taskModal = useSelector(selectTaskModal)    
+    const dispatch = useDispatch()
     const [newTaskName, setNewTaskName] = useState(taskModal.name);
     const [newTaskDescription, setNewTaskDescription] = useState(taskModal.description);
     const [newTaskStatus, setNewTaskStatus] = useState(taskModal.status || 'pendente');
     const [pendingPhoto, setPendingPhoto] = useState(undefined); 
     const [error, setError] = useState(false)
-    const tittleModal = taskModal.titleModal;
-
-    const dispatch = useDispatch()
-    const handleClose = () =>{
-        setSended(true)
-        dispatch(removeTaskModal())  
-    }
+    
     useEffect(() => {
         setNewTaskName(taskModal.name || '');
         setNewTaskDescription(taskModal.description || '');
         setNewTaskStatus(taskModal.status || 'pendente');        
-    }, [taskModal,sended]);  
-
-    const normFile = (e) => {
-        return Array.isArray(e) ? e : e?.fileList;
+    }, [taskModal]);  
+        
+    const handleClose = () => {        
+        dispatch(removeTaskModal());
     };
     let task = {
         name: newTaskName,
         description: newTaskDescription,
         status: newTaskStatus           
     };
-    
+
     const handleSaveTask = async() => {
         if (!task?.name || !task?.description ){
             setError(true);
@@ -50,39 +44,37 @@ export function TaskModal() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(task)
-        })   
+        })
         .then((response) => response?.json())    
-        .then((response) => {   
+        .then((response) => { 
             if(pendingPhoto?.name){                
                 const idTask = response.id
                 const formData = new FormData();
-                formData.append('file', pendingPhoto);                
+                formData.append('file', pendingPhoto);                                
                 fetch(`${process.env.REACT_APP_TASK_UP}/${idTask}`, {
                     method: 'POST',
                     body: formData
                 })
-                .finally(()=>handleClose())
                 .catch(error => {
                     console.error('Erro ao enviar imagem:', {error});
-                });
-                dispatch(updateTaskDetails(formData))
+                });              
             }
+        })
+        .finally(()=>{
             dispatch(updateTaskDetails(task))
+            setError(false);
             handleClose()
         })
         .catch(error => {
             console.error('Erro :', error);
         })
-        setSended(true)
-
     };
- 
     return (
-        <Modal   title={tittleModal} open={ taskModal.isOpen }  onOk={ handleClose} onCancel={ handleClose}
-          footer={[
-            <Button key="back" onClick={handleClose}>Cancelar</Button>,
-            <Button key="submit" type="primary"    onClick={handleSaveTask}>Salvar</Button>
-          ]}
+        <Modal title={taskModal.titleModal} open={ taskModal.isOpen }  onOk={ handleClose} onCancel={ handleClose}
+            footer={[ 
+                <Button key="back" onClick={handleClose}>Cancelar</Button>,
+                <Button key="submit" type="primary"    onClick={handleSaveTask}>Salvar</Button>
+            ]}
         >
             <Typography.Title level={5} style={{marginTop: 16}}>Nome</Typography.Title>            
             {error  && <span style={{color:'red'}}>* Por favor, preencha o nome da tarefa</span>}
@@ -100,21 +92,13 @@ export function TaskModal() {
                 onChange={(e) => {if (taskModal.typeModal === 'edit') setNewTaskStatus(e.label)}} 
                 options={[ { value: 'pendente', label: 'pendente' }, { value: 'concluido', label: 'concluido' }] }
             />
-            <Form style={{marginTop: 16}}>
-                <Form.Item
-                    name="imagem"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
-                    rules={[{ required: true, message: 'Por favor, selecione uma imagem' }]}
-                >
-                    <Upload
-                        name="logo"
-                        listType="picture"
-                        onChange={(info) => setPendingPhoto(info.file.originFileObj)}
-                    >
-                        <Button icon={<UploadOutlined />}>Imagem</Button>
-                    </Upload>
-                </Form.Item>
-            </Form>
+            <Upload key={taskModal.taskId}
+                maxCount={1}
+                name="logo"
+                listType="picture"
+                onChange={(info) => setPendingPhoto(info.file.originFileObj)}
+            >
+                <Button style={{marginTop: 16}} icon={<UploadOutlined />}>Imagem</Button>
+            </Upload>
         </Modal>
     );}
